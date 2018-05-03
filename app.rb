@@ -18,6 +18,7 @@ configure :production do
 end
 
 # ...rest of file
+enable :sessions
 
 get "/" do
   if session[:user_id]
@@ -34,7 +35,7 @@ post "/" do
   @user = User.find_by(username: params[:username])
   if @user && @user.password == params[:password]
     session[:user_id] = @user.id
-    flash[:info] = "Welcome "
+    flash[:info] = "Welcome #{params[:username]}"
     redirect "/"
   else
     flash[:warning] = "Your username or password is incorrect"
