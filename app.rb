@@ -3,20 +3,21 @@ require 'sinatra/activerecord'
 require 'sinatra/flash'
 require "./models"
 
-set :database, "sqlite3:app.db"
-enable :sessions
+# ...beginning of file
 
-configure :developement do 
-  set :database, "sqlite3:app.db"
+# this will ensure this will only be used locally
+configure :development do
+  set :database, "sqlite3:[name of database file]"
 end
 
-configure :production do 
+# this will ensure this will only be used on production
+configure :production do
+  # this environment variable is auto generated/set by heroku
+  #   check Settings > Reveal Config Vars on your heroku app admin panel
   set :database, ENV["DATABASE_URL"]
 end
 
-enable session
-
-
+# ...rest of file
 
 get "/" do
   if session[:user_id]
