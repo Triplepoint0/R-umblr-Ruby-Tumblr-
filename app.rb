@@ -35,7 +35,7 @@ post "/" do
   if @user && @user.password == params[:password]
     session[:user_id] = @user.id
     flash[:info] = "Welcome "
-    redirect "/profile"
+    redirect "/"
   else
     flash[:warning] = "Your username or password is incorrect"
     redirect "/"
