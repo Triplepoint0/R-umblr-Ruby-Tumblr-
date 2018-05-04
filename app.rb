@@ -62,7 +62,7 @@ post "/sign-up" do
     password: params[:password]
   )
   session[:user_id] = @user.id
-  flash[:info] = "Welcome #{params[:name]}"
+  flash[:info] = "Welcome #{params[:username]}"
   redirect "/"
 end
 
