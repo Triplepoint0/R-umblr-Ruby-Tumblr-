@@ -22,7 +22,12 @@ enable :sessions
 
 get "/" do
   if session[:user_id]
+    @posts = Post.all
     @user = User.find(session[:user_id])
+    @post = Post.create(
+      title: params[:title],
+      post: params[:post]
+    )
     erb :signed_home
   else
     erb :index
@@ -52,22 +57,24 @@ end
 #  erb :users
 #end
 
-
-
-
-
 post "/sign-up" do
   @user = User.create(
     username: params[:username],
-    password: params[:password]
+    password: params[:password],
+    first_name: params[:first_name],
+    last_name: params[:last_name],
+    birthday: params[:birthday]
   )
+
+  # @post = Post.create(
+  #   title: params[:title],
+  #   post: params[:post]
+  # )
+
   session[:user_id] = @user.id
   flash[:info] = "Welcome #{params[:username]}"
   redirect "/"
 end
-
-
-
 
 get "/sign-out" do
   # this is the line that signs a user out
@@ -75,3 +82,76 @@ get "/sign-out" do
   erb :sign_out
 end
 
+post "/posts" do
+  if session[:user_id]
+    @user = User.find(session[:user_id])
+    @post = Post.create(
+      title: params[:title],
+      post: params[:post]
+    )
+    @post = Post.all
+    
+    erb :posts
+  else
+    erb :index
+  end
+end
+
+get "/posts" do
+  @post = Post.create(
+    title: params[:title],
+    post: params[:post],
+    user_id: params[:user_id]
+  )
+end
+
+# ##get "/posts/:user_id" do
+#   @post = Post.create(
+#     title: params[:title],
+#     post: params[:post],
+#     user_id: params[:user_id]
+#   )
+# end
+
+# post "/posts/:user_id" do
+#   erb :index
+# end 
+
+# get "/posts/:user_id" do
+#   @post = Post.find(params[:user_id])
+#  end
+
+# delete "/posts/:user_id" do
+# 	@post = Post.find(params[:user_id])
+# 	@post.destroy
+# 	redirect '/'
+
+get "/posts/:user_id" do
+  @post = Post.find(params[:user_id])
+  erb :posts_page
+ end
+
+ delete '/posts/:user_id' do
+	@post = Post.find(params[:user_id])
+	@post.destroy
+	redirect '/'
+end
+
+get "/deleteuser" do
+ if session[:user_id]
+     @post = Post.all
+     @post.each do |post|
+         if (post.user_id == session[:user_id] )
+             post.destroy
+         else
+             next
+         end  
+     end      
+     # @id = session[:user_id]
+     @user = User.find(session[:user_id]).destroy
+     # @posts = Post.find_by(user_id: @id).destroy
+     
+     session[:user_id] = nil
+ end
+erb :index
+end

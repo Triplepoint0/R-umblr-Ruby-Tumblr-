@@ -1,6 +1,40 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="display-4">Home Page</h1>
-    <p class="lead">Welcome! Hope that you're having a wonderful day today <%= @user.username %>.</p>
+    <p class="lead">Welcome! Hope that you're having a wonderful day today <%= @user.first_name %>.</p>
+    <p class="lead">First Name:<%= @user.first_name %><p>
+    <p class="lead">Last Name:<%= @user.last_name %><p>
+    <p class="lead">Birthday:<%= @user.birthday %><p>
   </div>
 </div>
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+  <form action="/posts" method="post">
+    <h5 class="card-title">Post Title: <input type="text" name="title" id="title"><br></h5>
+    <h6 class="card-subtitle mb-2 text-muted">05-04-2018</h6>
+    <p class="card-text"><div class="form-group">
+    <label for="exampleFormControlTextarea1">Post Content:</label>
+    <input type="text" name="post" id="post">
+  </div></p>
+  <button type="submit" class="btn btn-primary">POST!</button>
+    </form>
+  </div>
+</div>
+
+
+<h2>Recent Posts</h2>
+<ul>
+<% @posts.reverse.first(20).each do |post| %>
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h4 class="card-title"><%= post.title %></h4>
+    <h6 class="card-subtitle mb-2 text-muted"><%= post.created_at%></h6>
+    <p class="card-text"><%= post.post %></p>
+    <a href="#" class="card-link">Delete</a>
+    <a href="#" class="card-link">Edit</a>
+  </div>
+</div>
+<% end %>
+
